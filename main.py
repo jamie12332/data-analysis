@@ -22,14 +22,21 @@ def get_points(f, r):
         out += [(x, f(x))]
     return out
 
-def get_r(points):
+def get_stuff(points):
     average_x, average_y = get_average(points)
 
     sxx = sum_list(points, lambda point: (point[0] - average_x) ** 2)
     syy = sum_list(points, lambda point: (point[1] - average_y) ** 2)
     sxy = sum_list(points, lambda point: (point[0] - average_x) * (point[1] - average_y))
     
-    return sxy / math.sqrt(sxx * syy)
+    gradient_sum = sum_list(points, lambda p: (p[1] - average_y) / (p[0] - average_x))
+
+    return {
+        "r": sxy / math.sqrt(sxx * syy),
+        "gradient": gradient_sum / len(points),
+        "average_x": average_x,
+        "average_y": average_y,
+    }
 
 X_MIN = 0
 X_MAX = 100
@@ -49,5 +56,5 @@ plot.ylabel("Y-axis")
 plot.savefig("plot.png", dpi=300)
 
 # Print the r value
-r = get_r(points)
-print(r)
+stuff = get_stuff(points)
+print(stuff)
